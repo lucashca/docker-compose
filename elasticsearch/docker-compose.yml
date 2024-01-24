@@ -1,0 +1,24 @@
+version: '3.3'
+
+networks:
+  graylog:
+    external: true
+
+services:
+  elasticsearch:
+    image:  docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    volumes:
+      - ./elasticsearchdata:/usr/share/elasticsearch/data
+    networks:
+      - graylog
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - node.max_local_storage_nodes=4
+      - "ES_JAVA_OPTS=-Xms128m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: always
